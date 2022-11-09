@@ -42,7 +42,6 @@
   }
 }
 
-
 a {
   font-weight: 500;
   color: #646cff;
@@ -60,14 +59,14 @@ body {
 
 h1 {
   font-size: $default-h1-font-size;
-  margin: 0.67em 0;
+  margin: 0.33em 0;
   line-height: $default-h1-line-height;
 }
-h2 { font-size: $default-h2-font-size; }
-h3 { font-size: $default-h3-font-size; }
-h4 { font-size: $default-h4-font-size; }
-h5 { font-size: $default-h5-font-size; }
-h6 { font-size: $default-h6-font-size; }
+h2 { font-size: $default-h2-font-size; margin: 0.30em 0; }
+h3 { font-size: $default-h3-font-size; margin: 0.25em 0; }
+h4 { font-size: $default-h4-font-size; margin: 0.21em 0; }
+h5 { font-size: $default-h5-font-size; margin: 0.18em 0; }
+h6 { font-size: $default-h6-font-size; margin: 0.15em 0; }
 h1, h2, h3, h4, h5, h6 { font-weight: $default-heading-font-weight; }
 
 button {
