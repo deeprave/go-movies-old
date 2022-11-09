@@ -1,0 +1,44 @@
+// theme settings
+$default-font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+$default-font-size: 16px;
+$default-font-weight: normal;
+$default-line-height: 1.15em;
+$default-dark-link-hover-color: #747bff;
+
+$default-dark-color: rgba(255, 255, 255, 0.87);
+$default-dark-background-color: #242424;
+$default-dark-link-hover-color: #747bff;
+$default-dark-button-background-color: #f9f9f9;
+
+$default-light-color: #213547;
+$default-light-background-color: #e0e0e0;
+$default-light-link-hover-color: #747bff;
+$default-light-button-background-color: #f9f9f9;
+
+$default-link-weight: 500;
+$default-link-color: #646cff;
+$default-link-hover-color: #535bf2;
+$default-link-hover-color-light: #747bff;
+
+$default-button-color: #1a1a1a;
+$default-button-border-color: #646cff;
+$default-button-color-light: #f9f9f9;
+
+$default-body-min-width: 320px;
+$default-body-min-height: 100vh;
+
+$default-html-line-height: 1.15em;
+
+$default-base-font-size: 16px;
+$default-base-line-height: 1.5em;
+$default-base-font-weight: normal;
+
+$default-h1-font-size: 3.2em;
+$default-h2-font-size: calc($default-h1-font-size * 0.75);
+$default-h3-font-size: calc($default-h1-font-size * 0.625);
+$default-h4-font-size: calc($default-h1-font-size * 0.5);
+$default-h5-font-size: calc($default-h1-font-size * 0.425);
+$default-h6-font-size: calc($default-h1-font-size * 0.325);
+
+$default-h1-line-height: 1.1;
+$default-heading-font-weight: bolder;
