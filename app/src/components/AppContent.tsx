@@ -1,3 +1,4 @@
+import React from "react"
 import Grid from "@react-css/grid"
 import { Route, Routes } from "react-router-dom"
 import { Home } from "./content/Home"
@@ -6,9 +7,7 @@ import { Categories } from "./content/Categories"
 import { NoMatch } from "./content/NoMatch"
 import { Movie } from "./content/Movie"
 
-type AppContentProps = {}
-
-const AppContent = ({}: AppContentProps) => {
+const AppContent = () => {
   return (
     <Grid className="content">
       <Routes>

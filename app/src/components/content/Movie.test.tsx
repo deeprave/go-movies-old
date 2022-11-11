@@ -1,9 +1,10 @@
+import React from "react"
 import { expect, describe, it, vi } from "vitest"
 import { render } from "@testing-library/react"
 
 import { Movie } from './Movie'
 
-let mockParam = 1
+const mockParam = 1
 vi.mock('react-router-dom', () => {
   return {
     useParams: vi.fn(() => ({

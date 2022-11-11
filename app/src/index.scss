@@ -122,6 +122,7 @@ button {
 
 .menu {
   margin-top: 1.5em;
+  //noinspection CssUnusedSymbol - this is in fact used by react-dom-router:NavLink
   .active {
     font-weight: bolder;
     background-color: aquamarine;

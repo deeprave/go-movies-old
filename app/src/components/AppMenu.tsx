@@ -2,10 +2,7 @@ import React from "react"
 import Grid from "@react-css/grid"
 import { NavLink } from "react-router-dom"
 
-type AppMenuProps = {
-}
-
-const AppMenu = ({}: AppMenuProps) => {
+const AppMenu = () => {
   return (
     <Grid className="menu">
       <nav>

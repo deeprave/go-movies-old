@@ -1,9 +1,7 @@
+import React from "react"
 import Grid from "@react-css/grid"
 
-
-type AppFooterProps = {}
-
-const AppFooter = ({}: AppFooterProps) => {
+const AppFooter = () => {
   return (
     <>
       <Grid className="footer">
