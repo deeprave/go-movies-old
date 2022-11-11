@@ -6,12 +6,12 @@ $default-line-height: 1.15em;
 $default-dark-link-hover-color: #747bff;
 
 $default-dark-color: rgba(255, 255, 255, 0.87);
-$default-dark-background-color: #242424;
+$default-dark-background-color: #424242;
 $default-dark-link-hover-color: #747bff;
 $default-dark-button-background-color: #f9f9f9;
 
 $default-light-color: #213547;
-$default-light-background-color: #e0e0e0;
+$default-light-background-color: #ffffff;
 $default-light-link-hover-color: #747bff;
 $default-light-button-background-color: #f9f9f9;
 
@@ -34,11 +34,18 @@ $default-base-line-height: 1.5em;
 $default-base-font-weight: normal;
 
 $default-h1-font-size: 3.2em;
-$default-h2-font-size: calc($default-h1-font-size * 0.75);
-$default-h3-font-size: calc($default-h1-font-size * 0.625);
-$default-h4-font-size: calc($default-h1-font-size * 0.5);
-$default-h5-font-size: calc($default-h1-font-size * 0.425);
-$default-h6-font-size: calc($default-h1-font-size * 0.325);
+$default-h2-font-size: $default-h1-font-size * 0.75;
+$default-h3-font-size: $default-h1-font-size * 0.625;
+$default-h4-font-size: $default-h1-font-size * 0.5;
+$default-h5-font-size: $default-h1-font-size * 0.425;
+$default-h6-font-size: $default-h1-font-size * 0.325;
+
+$default-h1-margin: calc($default-h1-font-size / 10) 0;
+$default-h2-margin: calc($default-h2-font-size / 8) 0;
+$default-h3-margin: calc($default-h3-font-size / 6) 0;
+$default-h4-margin: calc($default-h4-font-size / 5) 0;
+$default-h5-margin: calc($default-h5-font-size / 3) 0;
+$default-h6-margin: calc($default-h6-font-size / 2) 0;
 
 $default-h1-line-height: 1.1;
-$default-heading-font-weight: bolder;
+$default-heading-font-weight: bold;

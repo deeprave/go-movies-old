@@ -1,13 +1,14 @@
-type AppHeaderProps = {
+import Grid from "@react-css/grid"
+
+export type AppHeaderProps = {
   title: string,
 }
 
 const AppHeader = ({title}: AppHeaderProps) => {
   return (
-    <>
+    <Grid className="header">
       <h1>{title}</h1>
-      <hr/>
-    </>
+    </Grid>
   )
 }
 

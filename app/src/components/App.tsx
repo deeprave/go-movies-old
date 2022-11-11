@@ -1,27 +1,32 @@
 import { useEffect } from "react"
-import { BrowserRouter as Router } from "react-router-dom"
+
+import Grid from '@react-css/grid'
 
 import AppHeader from "./AppHeader"
 import AppContent from "./AppContent"
 import AppFooter from "./AppFooter"
+import AppMenu from "./AppMenu"
 
 import './App.scss'
 
-const App = () => {
-  const title = "Movie Time!"
+type AppProps = {
+  title: string
+}
+
+const App = ({title}: AppProps) => {
   useEffect(() => {
     document.title = title
   })
+
   return (
-    <div className="App">
-      <Router>
-        <AppHeader
-          title={title}
-        />
+    <Grid as={'main'} className="App">
+      <AppHeader title={title}/>
+      <Grid columns="150px auto" gap="1em">
+        <AppMenu/>
         <AppContent/>
-        <AppFooter/>
-      </Router>
-    </div>
+      </Grid>
+      <AppFooter/>
+    </Grid>
   )
 }
 

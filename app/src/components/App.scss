@@ -4,7 +4,35 @@
   margin: 0 auto;
 }
 
+.menu {
+
+  nav {
+    font-size: 1.25em;
+    line-height: 1.5em;
+
+    ul {
+      list-style: none;
+    }
+  }
+}
+
+.content {
+  padding: 1em;
+  line-height: 1.1em;
+  font-size: 1.25em;
+}
+
 .footer {
   margin: 0 auto;
   text-align: center;
+}
+
+table {
+  width: 100%;
+  tr {
+    line-height: 1.75em;
+    td {
+      font-size: 1.15em;
+    }
+  }
 }

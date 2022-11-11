@@ -1,4 +1,4 @@
-
+import Grid from "@react-css/grid"
 
 
 type AppFooterProps = {}
@@ -6,10 +6,9 @@ type AppFooterProps = {}
 const AppFooter = ({}: AppFooterProps) => {
   return (
     <>
-      <hr/>
-      <div className={"footer"}>
-        <h6>the end</h6>
-      </div>
+      <Grid className="footer">
+        <p data-testid="footer">Copyright &copy; Uniquode</p>
+      </Grid>
     </>
   )
 }
