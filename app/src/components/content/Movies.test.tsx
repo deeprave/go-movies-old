@@ -1,11 +1,25 @@
 import React from "react"
-import { expect, describe, it } from "vitest"
+import { expect, describe, it, vi } from "vitest"
 import { render } from "@testing-library/react"
 import { BrowserRouter } from "react-router-dom"
 
 import { Movies } from "./Movies"
 
 describe("Movies component", () => {
+
+  vi.mock("react-router-dom", async () => ({
+    // eslint-disable-next-line
+    ...(await vi.importActual<any>("react-router-dom")),
+    useLocation() {
+      return {
+        pathname: '/movies',
+        search: '',
+        hash: '',
+        state: '',
+        key: '',
+      }
+    }
+  }))
 
   it("renders correctly", () => {
     const movies = render(<Movies />, {wrapper: BrowserRouter})
@@ -34,7 +48,7 @@ describe("Movies component", () => {
     expect(links).to.not.be.null
     expect(links?.length).toBeGreaterThan(1)
     links?.forEach((link) => {
-      expect(link.href).toMatch(/\/movie\/\d+/)
+      expect(link.href).toMatch(/\/movies\/\d+/)
     })
   })
 

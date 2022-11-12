@@ -22,6 +22,8 @@ describe("Movie component", () => {
   it("contains a title with the movie id", () => {
     const movie = render(<Movie />)
     const heading = movie.getByRole('heading')
-    expect(heading.textContent).toEqual(`Movie ${mockParam}`)
+    expect(heading.textContent).toEqual(`Movie:`)
+    const table = movie.getByRole('table')
+    expect(table).toBeInTheDocument()
   })
 })
