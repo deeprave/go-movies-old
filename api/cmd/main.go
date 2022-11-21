@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"github.com/chigopher/pathlib"
 	"go-movies/api/app"
-	"go-movies/api/helpers"
 	"os"
 )
 
 const version = "0.9.0"
 
 func main() {
-	cfg := helpers.AppConfig{
+	cfg := app.Config{
 		Version: version,
 	}
 

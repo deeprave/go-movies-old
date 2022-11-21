@@ -14,13 +14,13 @@ func (api *Api) GetStatusHandler(w http.ResponseWriter, _ *http.Request, _ httpr
 		Environment string `json:"environment"`
 		Version     string `json:"version"`
 	}
-	cfg := api.app.Config
+	cfg := api.Config()
 	currentStatus := AppStatus{
 		Status:      "Available",
 		Environment: cfg.Env,
 		Version:     cfg.Version,
 	}
-	err := api.app.ModelToJson(w, http.StatusOK, currentStatus, "status")
+	_, err := api.app.ModelToJson(w, http.StatusOK, currentStatus, "status")
 	if err != nil {
 		api.Log("status: ", err)
 	}
@@ -51,18 +51,23 @@ func getMovies() []*models.Movie {
 func (api *Api) GetMovieHandler(w http.ResponseWriter, _ *http.Request, p httprouter.Params) {
 	idStr := p.ByName("id")
 	id, err := strconv.Atoi(idStr)
+	var status = http.StatusBadRequest
 	if err == nil {
-		err = api.app.ModelToJson(w, http.StatusOK, getMovie(id), "movie")
+		status, err = api.app.ModelToJson(w, http.StatusOK, getMovie(id), "movie")
 	}
 	if err != nil {
-		api.Error(w, http.StatusBadRequest, err)
+		api.Error(w, status, err)
 	}
 }
 
 func (api *Api) GetMoviesHandler(w http.ResponseWriter, _ *http.Request, _ httprouter.Params) {
 	movies := getMovies()
-	if err := api.app.ModelToJson(w, http.StatusOK, movies, "movie"); err != nil {
-		api.Error(w, http.StatusBadRequest, err)
+	var (
+		status = http.StatusOK
+		err    error
+	)
+	if status, err = api.app.ModelToJson(w, status, movies, "movie"); err != nil {
+		api.Error(w, status, err)
 	}
 }
 

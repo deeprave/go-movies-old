@@ -2,73 +2,63 @@ package app
 
 import (
 	"encoding/json"
-	"go-movies/api/helpers"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 )
 
-type Error struct {
-	message string
-	status  int
-}
-
-// satisfy stdlib Error interface
-
-func (e *Error) Error() string {
-	return e.message
-}
-
-func (e *Error) Status() int {
-	if e.status == 0 {
-		// default status
-		return http.StatusBadRequest
+func NewApplication(cfg *Config, logwriter io.Writer, prefix string) *Application {
+	logger := log.New(logwriter, prefix, log.Lmsgprefix|log.Ldate|log.Ltime|log.Lmicroseconds)
+	return &Application{
+		cfg: cfg,
+		log: logger,
 	}
-	return e.status
 }
 
-func NewError(message string, status int) *Error {
-	err := Error{
-		message: message,
-		status:  status,
-	}
-	return &err
+func (cfg *Config) Address() string {
+	return fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
 }
 
 type Application struct {
-	Config *helpers.AppConfig
-	Logger *log.Logger
+	cfg *Config
+	log *log.Logger
 }
 
-func NewApplication(cfg *helpers.AppConfig, logwriter io.Writer, prefix string) *Application {
-	logger := log.New(logwriter, prefix, log.Lmsgprefix|log.Ldate|log.Ltime|log.Lmicroseconds)
-	return &Application{
-		Config: cfg,
-		Logger: logger,
-	}
+func (app *Application) Address() string {
+	return app.cfg.Address()
 }
 
-func (app *Application) ModelToJson(w http.ResponseWriter, status int, data interface{}, wrap string) *Error {
-	var (
-		jsonstr []byte
-		err     error
-	)
+func (app *Application) Logger() *log.Logger {
+	return app.log
+}
+
+func (app *Application) Config() *Config {
+	return app.cfg
+}
+
+func (app *Application) Log(v ...any) {
+	app.Logger().Print(v...)
+}
+
+func (app *Application) ModelToJson(w http.ResponseWriter, status int, data interface{}, wrap string) (int, error) {
 	wrapper := make(map[string]interface{})
 	wrapper[wrap] = data
-	if jsonstr, err = json.Marshal(wrapper); err == nil {
+	if jsonstr, err := json.Marshal(wrapper); err != nil {
+		return http.StatusNotAcceptable, err
+	} else {
 		w.Header().Set("Content-Type", "application/json")
 		w.WriteHeader(status)
-		_, err = w.Write(jsonstr)
+		if _, err = w.Write(jsonstr); err != nil {
+			return http.StatusBadGateway, err
+		}
 	}
-	if err != nil {
-		return NewError(err.Error(), 0)
-	}
-	return nil
+	return http.StatusOK, nil
 }
 
-func (app *Application) ErrorToJson(w http.ResponseWriter, status int, error error) error {
+func (app *Application) ErrorToJson(w http.ResponseWriter, status int, error error) (int, error) {
 	type ErrorReport struct {
 		Message string `json:"message"`
 	}
-	return app.ModelToJson(w, status, ErrorReport{error.Error()}, "errors")
+	return app.ModelToJson(w, status, ErrorReport{error.Error()}, "error")
 }

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/julienschmidt/httprouter"
 	"go-movies/api/app"
-	"log"
 	"net/http"
 	"os"
 	"time"
@@ -23,16 +22,15 @@ func NewApi(app *app.Application) *Api {
 }
 
 func (api *Api) Address() string {
-	cfg := api.app.Config
-	return fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
-}
-
-func (api *Api) Logger() *log.Logger {
-	return api.app.Logger
+	return api.app.Config().Address()
 }
 
 func (api *Api) Log(v ...any) {
-	api.Logger().Print(v...)
+	api.app.Log(v...)
+}
+
+func (api *Api) Config() *app.Config {
+	return api.app.Config()
 }
 
 func (api *Api) startServer() {
@@ -54,17 +52,17 @@ func (api *Api) startServer() {
 	}
 }
 
-func (api *Api) Respond(w http.ResponseWriter, data interface{}) *app.Error {
-	err := api.app.ModelToJson(w, http.StatusOK, data, "data")
+func (api *Api) Respond(w http.ResponseWriter, data interface{}) error {
+	status, err := api.app.ModelToJson(w, http.StatusOK, data, "data")
 	if err != nil {
-		api.Error(w, http.StatusBadRequest, err)
+		api.Error(w, status, err)
 	}
 	return err
 }
 
 func (api *Api) Error(w http.ResponseWriter, status int, err error) {
 	api.Log(err, status)
-	_ = api.app.ErrorToJson(w, status, err)
+	_, _ = api.app.ErrorToJson(w, status, err)
 }
 
 func (api *Api) AddHandler(method string, path string, handler httprouter.Handle) {
