@@ -24,7 +24,7 @@ func getApi() *Api {
 	}
 }
 
-func TestApi_Config(t *testing.T) {
+func TestApiConfig(t *testing.T) {
 	//api := getApi()
 
 }
