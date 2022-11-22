@@ -1,0 +1,11 @@
+name: Display the current date and time
+
+on:
+  create
+
+jobs:
+  run-the-date:
+    runs-on: ubuntu-latest
+    steps:
+      - name: run date
+        run: date

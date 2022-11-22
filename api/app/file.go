@@ -3,6 +3,7 @@ package app
 import (
 	"fmt"
 	"github.com/chigopher/pathlib"
+	"github.com/spf13/afero"
 )
 
 type PathTypes interface {
@@ -14,8 +15,17 @@ type PathTypes interface {
 // - current directory (default)
 // - directory of <appname> executable
 // - in the directory $HOME/.<appname>
-func FindFile(filename string) (string, error) {
-	path, err := FindPath(pathlib.NewPath(filename))
+func FindFile(filename string, v ...any) (string, error) {
+	var fs afero.Fs = nil
+	var index = 0
+	var ok bool
+	if len(v) > 0 { // default fs
+		if fs, ok = v[0].(afero.Fs); ok {
+			index++
+		}
+	}
+	filepath := pathlib.NewPathAfero(filename, fs)
+	path, err := FindPath(filepath, v[index:]...)
 	if err != nil {
 		return "", err
 	}
