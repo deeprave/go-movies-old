@@ -6,8 +6,16 @@ import (
 	"github.com/spf13/afero"
 )
 
-type PathTypes interface {
-	string | *pathlib.Path
+func FindFs(v ...any) (afero.Fs, int) {
+	var fs afero.Fs = afero.OsFs{}
+	var index = 0
+	if len(v) > 0 { // default fs
+		var ok bool
+		if fs, ok = v[0].(afero.Fs); ok {
+			index++
+		}
+	}
+	return fs, index
 }
 
 // FindFile
@@ -16,20 +24,25 @@ type PathTypes interface {
 // - directory of <appname> executable
 // - in the directory $HOME/.<appname>
 func FindFile(filename string, v ...any) (string, error) {
-	var fs afero.Fs = nil
-	var index = 0
-	var ok bool
-	if len(v) > 0 { // default fs
-		if fs, ok = v[0].(afero.Fs); ok {
-			index++
-		}
-	}
+	fs, index := FindFs(v...)
 	filepath := pathlib.NewPathAfero(filename, fs)
-	path, err := FindPath(filepath, v[index:]...)
+	if len(v) > index {
+		v = v[index:]
+	}
+	path, err := FindPath(filepath, v...)
 	if err != nil {
 		return "", err
 	}
 	return path.String(), err
+}
+
+func FindFileExists(path *pathlib.Path) bool {
+	if ok, _ := path.Exists(); ok {
+		if ok, _ := path.IsFile(); ok {
+			return true
+		}
+	}
+	return false
 }
 
 // FindPath
@@ -37,16 +50,14 @@ func FindFile(filename string, v ...any) (string, error) {
 // - current directory (default)
 // - directory of <appname> executable
 // - in the directory $HOME/.<appname>
-func FindPath(filepath *pathlib.Path, search ...any) (*pathlib.Path, error) {
+func FindPath(path *pathlib.Path, search ...any) (*pathlib.Path, error) {
 	// try the given file directly, caller may have provided the full path
-	if ok, _ := filepath.Exists(); ok {
-		if ok, _ := filepath.IsDir(); !ok {
-			return filepath, nil
-		}
+	if FindFileExists(path) {
+		return path, nil
 	}
-	fs := filepath.Fs()
 
-	dirs := make([]*pathlib.Path, 0, len(search)+1)
+	fs := path.Fs()
+	dirs := make([]*pathlib.Path, 0, len(search))
 	if len(search) == 0 {
 		dirs = append(dirs, pathlib.NewPathAfero(".", fs))
 	} else {
@@ -60,11 +71,11 @@ func FindPath(filepath *pathlib.Path, search ...any) (*pathlib.Path, error) {
 	}
 	for _, dir := range dirs {
 		if ok, _ := dir.IsDir(); ok {
-			p := dir.JoinPath(filepath)
-			if ok, _ = p.Exists(); ok {
+			p := dir.JoinPath(path)
+			if FindFileExists(p) {
 				return p, nil
 			}
 		}
 	}
-	return nil, fmt.Errorf("no file found '%s'", filepath.String())
+	return nil, fmt.Errorf("no file found '%s'", path.String())
 }

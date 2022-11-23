@@ -1,40 +1,46 @@
 package app
 
 import (
+	"errors"
 	"gopkg.in/yaml.v3"
-	"log"
 	"os"
 )
 
 type Config struct {
+	Version string `yaml:"version"`
+	Env     string `yaml:"env"`
 	Port    int    `yaml:"port"`
 	Host    string `yaml:"host"`
-	Env     string `yaml:"env"`
-	Version string `yaml:"version"`
 }
 
 func NewConfig(version string) *Config {
 	return &Config{
+		Version: version,
+		Env:     "prod",
 		Port:    9000,
 		Host:    "localhost",
-		Env:     "prod",
-		Version: version,
 	}
 }
 
-func (cfg *Config) Read(fromFile string) bool {
-	filename, err := FindFile(fromFile)
+func NewConfigFromFile(filename string, version string, v ...any) (*Config, error) {
+	cfg := NewConfig(version)
+	return cfg, cfg.Read(filename, version, v...)
+}
+
+func (cfg *Config) VersionOk(version string) bool {
+	return version == cfg.Version
+}
+
+func (cfg *Config) Read(filename string, version string, v ...any) error {
+	filepath, err := FindFile(filename, v...)
 	if err == nil {
 		var data []byte
-		if data, err = os.ReadFile(filename); err != nil {
-			log.Printf("Config '%s': %v", fromFile, err)
-		} else {
+		if data, err = os.ReadFile(filepath); err == nil {
 			err = yaml.Unmarshal(data, cfg)
-			if err != nil {
-				log.Fatalf("yaml unmarshal error: %v", err)
-			}
-			return true
+		}
+		if err == nil && !cfg.VersionOk(version) {
+			err = errors.New("config version '%s' is not compatible")
 		}
 	}
-	return false
+	return err
 }
